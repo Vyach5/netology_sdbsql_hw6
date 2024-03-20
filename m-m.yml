@@ -1,0 +1,43 @@
+version: '3'
+services:
+    mysql-master:
+      image: mysql:8.0
+      container_name: master-1
+      restart: unless-stopped
+      env_file: .env
+      cap_add:
+        - all
+      volumes:
+        - ./master_1/my.cnf:/etc/my.cnf
+      command: --default-authentication-plugin=mysql_native_password
+      environment:
+        - TZ:${TZ}
+        - MYSQL_USER:${MYSQL_USER}
+        - MYSQL_PASSWORD:${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD:${MYSQL_ROOT_PASSWORD}
+        #- MYSQL_ALLOW_EMPTY_PASSWORD:true     
+      networks:
+        default:
+          aliases:
+            - mysql
+            
+    mysql-slave:
+      image: mysql:8.0
+      container_name: master-2
+      restart: unless-stopped
+      env_file: .env
+      cap_add:
+        - all
+      volumes:
+        - ./master_2/my.cnf:/etc/my.cnf
+      command: --default-authentication-plugin=mysql_native_password
+      environment:
+        - TZ:${TZ}
+        - MYSQL_USER:${MYSQL_USER}
+        - MYSQL_PASSWORD:${MYSQL_PASSWORD}
+        - MYSQL_ROOT_PASSWORD:${MYSQL_ROOT_PASSWORD}
+        #- MYSQL_ALLOW_EMPTY_PASSWORD:true     
+      networks:
+        default:
+          aliases:
+            - mysql
